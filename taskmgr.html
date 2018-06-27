@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Homework</title>
+<style type="text/css">
+	* {margin:0;padding:0}
+	
+	.header {
+		background-color: black;
+		color: white;
+	}
+	div.item {
+		background-color: yellow;
+	}
+	textarea.content {
+		display:inline;
+		width:70%;
+		resize:vertical;
+	}
+	div.remove_btn {
+		display:inline;
+	}
+</style>
+
+<script>
+    function new_task() 
+    {
+        console.log("new_task");
+        var new_div = document.createElement("div");
+        new_div.className = "item";
+        var new_text_area = document.createElement("textarea");
+        new_text_area.className = "content";
+        new_div.appendChild(new_text_area);
+        new_remove_div = document.createElement("div");
+        new_remove_div.className = "remove_btn";
+        new_remove_btn = document.createElement("a");
+        new_remove_btn.href = "javascript:;";
+        new_remove_btn_text = document.createTextNode("Remove");
+        new_remove_div.appendChild(new_remove_btn);
+        new_remove_btn.appendChild(new_remove_btn_text);
+        new_div.appendChild(new_remove_div);
+        var new_task_div = document.getElementById("new-task-div");
+        new_task_div.parentNode.insertBefore(new_div, new_task_div);
+        
+        new_remove_btn.addEventListener("click", remove_task);
+    }
+    
+    function remove_task()
+    {
+	    console.log("remove-task:", this);
+	    remove_btn = this.parentNode;
+	    item = remove_btn.parentNode;
+	    container = item.parentNode;
+	    container.removeChild(item);
+    }
+</script>
+</head>
+
+<body>
+<div class='header'><p>Tasks</p></div>
+<div class='item'>
+	<div class='remove_btn'><textarea class='content'></textarea></div>
+	<div class='remove_btn'><a href="javascript:;">Remove</a></div>
+</div>
+<div class='new' id="new-task-div"><a id="new-task" href="javascript:;">Add New Task</a></div>
+
+<script>
+	document.getElementById("new-task").addEventListener("click", new_task);
+	
+</script>
+</body>
+
+</html>
