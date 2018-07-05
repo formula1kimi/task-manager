@@ -13,13 +13,15 @@
 	div.item {
 		background-color: yellow;
 	}
-	textarea.content {
+	.content {
 		display:inline;
 		width:70%;
 		resize:vertical;
 	}
-	div.remove_btn {
+	div.item_button {
 		display:inline;
+		margin-left: 4px;
+		margin-right: 4px;
 	}
 </style>
 
@@ -29,45 +31,67 @@
         console.log("new_task");
         var new_div = document.createElement("div");
         new_div.className = "item";
+        
         var new_text_area = document.createElement("textarea");
         new_text_area.className = "content";
         new_div.appendChild(new_text_area);
-        new_remove_div = document.createElement("div");
-        new_remove_div.className = "remove_btn";
-        new_remove_btn = document.createElement("a");
-        new_remove_btn.href = "javascript:;";
-        new_remove_btn_text = document.createTextNode("Remove");
-        new_remove_div.appendChild(new_remove_btn);
-        new_remove_btn.appendChild(new_remove_btn_text);
-        new_div.appendChild(new_remove_div);
-        var new_task_div = document.getElementById("new-task-div");
-        new_task_div.parentNode.insertBefore(new_div, new_task_div);
         
-        new_remove_btn.addEventListener("click", remove_task);
+        var new_remove_btn = create_button("Remove", remove_task);
+        new_div.appendChild(new_remove_btn);
+        
+        var new_save_btn = create_button("Save", save_task);
+        new_div.appendChild(new_save_btn);
+
+        var item_list = document.getElementsByClassName("item-list")[0];
+        item_list.appendChild(new_div);
+    }
+    
+    function create_button(text, on_click)
+    {
+        var new_btn_div = document.createElement("div");
+        new_btn_div.className = "item_button";
+        var new_btn_a = document.createElement("a");
+        new_btn_a.href = "javascript:;";
+        var new_btn_a_text = document.createTextNode(text);
+        new_btn_div.appendChild(new_btn_a);
+        new_btn_a.appendChild(new_btn_a_text);
+        new_btn_a.addEventListener("click", on_click);
+        return new_btn_div;
     }
     
     function remove_task()
     {
 	    console.log("remove-task:", this);
-	    remove_btn = this.parentNode;
-	    item = remove_btn.parentNode;
-	    container = item.parentNode;
-	    container.removeChild(item);
+        var btn = this.parentNode;
+        var item = btn.parentNode;
+        var item_list = document.getElementsByClassName("item-list")[0];
+        item_list.removeChild(item);
     }
+    
+    function save_task()
+    {
+        console.log("save-task:", this);
+        var btn = this.parentNode;
+        var item = btn.parentNode;
+        var text_area = item.firstChild;
+        var text_label = document.createElement("p");
+        text_label.className = "content";
+        var text = document.createTextNode(text_area.value);
+        text_label.appendChild(text)
+        item.replaceChild(text_label, text_area);
+    }
+    
 </script>
 </head>
 
 <body>
 <div class='header'><p>Tasks</p></div>
-<div class='item'>
-	<div class='remove_btn'><textarea class='content'></textarea></div>
-	<div class='remove_btn'><a href="javascript:;">Remove</a></div>
-</div>
+<div class='item-list'></div>
 <div class='new' id="new-task-div"><a id="new-task" href="javascript:;">Add New Task</a></div>
 
 <script>
 	document.getElementById("new-task").addEventListener("click", new_task);
-	
+	new_task();
 </script>
 </body>
 
