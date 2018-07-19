@@ -71,16 +71,36 @@
     function save_task()
     {
         console.log("save-task:", this);
-        var btn = this.parentNode;
-        var item = btn.parentNode;
+        var btn_div = this.parentNode;
+        var item = btn_div.parentNode;
         var text_area = item.firstChild;
         var text_label = document.createElement("p");
         text_label.className = "content";
         var text = document.createTextNode(text_area.value);
         text_label.appendChild(text)
         item.replaceChild(text_label, text_area);
+
+        // Change the save button to edit.
+        var edit_btn_div = create_button("Edit", edit_task);
+        item.replaceChild(edit_btn_div, btn_div);
     }
     
+    function edit_task()
+    {
+        console.log("edit-task:", this);
+        var new_text_area = document.createElement("textarea");
+        new_text_area.className = "content";
+        var btn_div = this.parentNode;
+        var item = btn_div.parentNode;
+        var text_label = item.firstChild;
+        var text = document.createTextNode(text_label.textContent);
+        new_text_area.appendChild(text);
+        item.replaceChild(new_text_area, text_label);
+
+        // Change the edit button to save.
+        var save_btn_div = create_button("Save", save_task);
+        item.replaceChild(save_btn_div, btn_div);
+    }
 </script>
 </head>
 
